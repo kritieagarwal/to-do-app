@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Ubuntu:ital@1&display=swap"
+        rel="stylesheet">
+
+    <!-- bootstrap  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!-- fontsawesome -->
+    <script src="https://kit.fontawesome.com/c035598f8c.js" crossorigin="anonymous"></script>
+
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="./css/home.css">
+
+</head>
+
+<body>
+
+    <h1 class="center-align heading">
+        <%= title %>
+    </h1>
+
+    <!-- this container div will hold the whole todo list -->
+    <div id="container">
+        <form action="/add-task" method="POST">
+
+            <!-- div for adding title of the task -->
+            <div class="card">
+                <h6 class="card-subtitle mb-2 text-muted">TITLE</h6>
+                <input type="text" name="title" class="form-control" placeholder="Enter title..." required>
+            </div>
+
+            <!-- div  for category and date heading -->
+            <div>
+            
+                <div class="category-card">
+                    <span class="text-muted">CATEGORY</span>
+                </div>
+            
+                <div class="due-date-card">
+                    <span class="text-muted">DUE-DATE</span>
+                </div>
+            
+            </div>
+            
+            <!--  div for drop down list of category and date input -->
+            <div>
+            
+                <div class="category-card">
+                    <select class="custom-select" name="cat">
+                        <option value="Personal">Personal</option>
+                        <option value="Professional">Professional</option>
+                        <option value="Academics">Academics</option>
+                        <option value="Social">Social</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            
+                <div class="due-date-card">
+                    <input type="date" name="date" required>
+                </div>
+            
+            </div>
+
+
+            <!-- div for adding description of the task -->
+            <div class="card">
+                <h6 class="card-subtitle mb-2 text-muted">DESCRIPTION</h6>
+                <textarea class="form-control" name="desc" placeholder="What do you need to do?" required></textarea>
+            </div>
+
+            
+            
+            <!-- div for add task button -->
+            <div class="action-button-container">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-plus"></i> Add Task</button>
+        </form>
+        
+
+        <!--  second form for deleting the task via getting id of the task via their checkboxes -->
+        <form action="/delete-task" method="get" class="aform">
+            <button class="btn btn-danger btn-lg" type="submit">
+                <i class="fas fa-trash-alt"></i> Delete Task </button>
+    </div>
+    
+
+    <!-- finding if todo list is empty or not -->
+    <% if(todo_list.length!=0){ %>
+    
+        <!-- loop to iterate over the tasks-->
+        <% for(let i of todo_list) { %>
+    
+            <!-- task card  -->
+            <div class="card task-card">
+                <!-- tickbox holding checkbox -->
+                <div class="tick-box">
+                    <input type="checkbox" class="select-task" id="checkbox" name="<%= i._id%>">
+                </div>
+                
+                <!-- task details -->
+                <div class="card-body task-body">
+                    <h5 class="card-title ">
+                        <%= i.title %>
+                    </h5>
+                    <p class="text-muted">
+                        <%= i.desc %>
+                    </p>
+                    <p class="text-muted"><i class="far fa-calendar-alt"></i>
+                        <%= i.date %>
+                    </p>
+                </div>
+    
+                <!-- box to hold task category -->
+                <div class="tag-box">
+    
+                    
+                <!-- implementing color scheme for tag box -->
+                <% if(i.cat=='Personal' ) {%>
+                    <h4><span class="badge badge-info">
+                            <%= i.cat %>
+                        </span></h4>
+                    <% }%>
+
+                        <% if(i.cat=='Professional' ) {%>
+                            <h4><span class="badge badge-success">
+                                    <%= i.cat %>
+                                </span></h4>
+                            <% }%>
+
+                                <% if(i.cat=='Academics' ) {%>
+                                    <h4><span class="badge badge-primary">
+                                            <%= i.cat %>
+                                        </span></h4>
+                                    <% }%>
+
+                                        <% if(i.cat=='Social' ) {%>
+                                            <h4><span class="badge badge-dark">
+                                                    <%= i.cat %>
+                                                </span></h4>
+                                            <% }%>
+
+                                                <% if(i.cat=='Other' ) {%>
+                                                    <h4><span
+                                                            class="badge badge-default">
+                                                            <%= i.cat %>
+                                                        </span></h4>
+                                                    <% }%>
+
+                </div>
+
+            </div>
+    
+    
+            <% } %>
+                <% } %>
+    
+                    <!-- to print message if task list is empty -->
+                    <% if( todo_list.length==0 ) {%>
+                        <h1 style="text-align: center;">No task Added Yet!</h1>
+    
+                        <% } %>
+            </div>
+    
+        </form>
+    
+<!-- bootstrap js files  -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
